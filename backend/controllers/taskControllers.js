@@ -118,3 +118,11 @@ export const getAllTasks = async (req, res) => {
     }
 }
 
+export const filterTasks = async (req, res) => {
+
+}
+
+export const countTasks = async (req, res) => {
+
+}
+
