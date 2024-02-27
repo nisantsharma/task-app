@@ -1,19 +1,45 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import axios from 'axios';
 
 import styles from './Delete.module.css';
 
 
 const Delete = () => {
     const navigate = useNavigate();
+    const params = useParams();
+    const { taskId } = params;
 
+    const config = {
+        headers: {
+            authorization: JSON.parse(localStorage.getItem('token'))
+        }
+    }
 
-    const deleteHandler = () => {
-        navigate('/dashboard');
+    const deleteHandler = async () => {
+        try {
+            await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/task/delete/${taskId}`, config)
+            navigate('/dashboard');
+        }
+        catch (err) {
+            if (err.response) {
+                alert(err.response.data.message);
+            }
+            else if (err.request) {
+                alert(err.request);
+            }
+            else {
+                alert(err.message);
+            }
+        }
     }
 
     const cancelHandler = () => {
         navigate('/dashboard');
     }
+
+
+
     return (
         <div className={styles.container}>
             <div className={styles.centeredDiv}>

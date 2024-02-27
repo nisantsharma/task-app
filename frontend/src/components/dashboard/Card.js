@@ -30,11 +30,13 @@ const Card = ({ item, index, clickedIcon, setClickedIcon }) => {
         arr = [arr[0]];
     }
 
-    const dateObj = item.dueDate;
+    let dateObj = item.dueDate;
     let date, month, year;
 
     if (dateObj) {
-        date = dateObj.getDay();
+        dateObj = new Date(dateObj);
+
+        date = dateObj.getDate();
         month = dateObj.toLocaleString('default', { month: 'short' });
         year = dateObj.getFullYear();
     }
@@ -120,11 +122,11 @@ const Card = ({ item, index, clickedIcon, setClickedIcon }) => {
                     }
                 </div>
                 <div className={styles.rightDiv} >
-                    <ThreedotPopup dotPopup={dotPopup} setDotPopup={setDotPopup} />
+                    <ThreedotPopup dotPopup={dotPopup} taskId={item._id} />
                     <img src={Threedots} alt='threedots' onClick={threedotHandler} />
                 </div>
             </div>
-            <p className={styles.cardTitle}>Hero Section Hero Section Hero Section Hero Section Hero Section Hero Section</p>
+            <p className={styles.cardTitle}>{item.title}</p>
             <div className={styles.checklistDiv}>
                 <div className={styles.paraDiv}>
                     <p style={{ marginRight: '5px' }}>Checklist</p>

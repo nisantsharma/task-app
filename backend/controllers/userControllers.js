@@ -18,8 +18,6 @@ export const loginUser = async (req, res) => {
             const match = await bcrypt.compare(password, hashedPassword);
 
             if (match) {
-                console.log(typeof user);
-                console.log(typeof user._id);
                 const token = jwt.sign({ userId: user._id }, process.env.ACCESS_SECRET_KEY);
 
                 return res.status(200).json({ message: 'login successfull', token });

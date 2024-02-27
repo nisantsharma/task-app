@@ -1,10 +1,25 @@
 import styles from './Filter.module.css'
 
 
+
 export default function Filter({ filter, setFilter, setFilterValue }) {
-	const clickHandler = (e) => {
-		setFilterValue(e.target.dataset.name);
-		setFilter(false);
+
+	const clickHandler = async (e) => {
+		try {
+			setFilterValue(e.target.dataset.name);
+			setFilter(false);
+		}
+		catch (err) {
+			if (err.response) {
+				alert(err.response.data.message);
+			}
+			else if (err.request) {
+				alert(err.request);
+			}
+			else {
+				alert(err.message);
+			}
+		}
 	}
 
 

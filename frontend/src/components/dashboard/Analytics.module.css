@@ -16,12 +16,22 @@
 
 .leftDiv {
     margin-right: 80px;
+    width: 20vw;
+}
+
+.rightDiv {
+    width: 20vw;
 }
 
 .line {
     display: flex;
-    align-items: center;
+    justify-content: space-between;
     margin-bottom: 15px;
+}
+
+.imageDiv {
+    display: flex;
+    align-items: center;
 }
 
 .line img {
@@ -29,7 +39,7 @@
 }
 
 .category {
-    margin-right: 10vw;
+    /* margin-right: 10vw; */
 }
 
 .count {

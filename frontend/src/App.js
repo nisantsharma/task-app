@@ -26,8 +26,8 @@ function App() {
 						<Route path='/settings' element={<SettingsPage />} />
 
 						<Route path='/create' element={<Create />} />
-						<Route path='/edit' element={<Create />} />
-						<Route path='/delete' element={<DeletePage />} />
+						<Route path='/edit/:taskId' element={<Create />} />
+						<Route path='/delete/:taskId' element={<DeletePage />} />
 						<Route path='/logout' element={<Logout />} />
 					</Routes>
 				</div>

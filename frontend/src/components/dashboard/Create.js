@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -22,6 +22,11 @@ const Create = () => {
     const [dueDate, setDueDate] = useState(null);
 
     const navigate = useNavigate();
+    const params = useParams();
+    const location = useLocation();
+
+    const { taskId } = params;
+    const path = location.pathname;
 
     const config = {
         headers: {
@@ -58,40 +63,81 @@ const Create = () => {
         setChecklistArr(newArr);
     }
 
+    const dateHandler = (e) => {
+        if (e.target.value) {
+            setDueDate(e.target.value);
+        }
+        else {
+            setDueDate(null);
+        }
+    }
+
     const cancelHandler = () => {
         setChecklistArr([]);
         navigate('/dashboard');
     }
 
     const saveHandler = async () => {
-        if (title.trim().length === 0) {
-            alert('please fill the title field');
-            return;
-        }
-        if (priority.length === 0) {
-            alert('please select priority');
-            return;
-        }
-        if (checklistArr.length === 0) {
-            alert('please create atleast one checklist');
-            return;
-        }
-        else {
-            const len = checklistArr.length;
+        try {
+            if (title.trim().length === 0) {
+                alert('please fill the title field');
+                return;
+            }
+            if (priority.length === 0) {
+                alert('please select priority');
+                return;
+            }
+            if (checklistArr.length === 0) {
+                alert('please create atleast one checklist');
+                return;
+            }
+            else {
+                const len = checklistArr.length;
 
-            for (let i = 0; i < len; i++) {
-                if (checklistArr[i].description.trim().length === 0) {
-                    alert(`please fill the checklist number ${i + 1}`);
+                for (let i = 0; i < len; i++) {
+                    if (checklistArr[i].description.trim().length === 0) {
+                        alert(`please fill the checklist number ${i + 1}`);
+                        return;
+                    }
+                }
+            }
+
+            if (dueDate) {
+                const todayDateObj = new Date();
+                const dueDateObj = new Date(dueDate);
+
+                const todayYear = todayDateObj.getFullYear();
+                const todayDate = todayDateObj.getDate();
+                const todayMonth = todayDateObj.getMonth();
+
+                const dueYear = dueDateObj.getFullYear();
+                const dueDated = dueDateObj.getDate();
+                const dueMonth = dueDateObj.getMonth();
+
+                if (dueYear < todayYear || dueMonth < todayMonth || dueDated < todayDate) {
+                    alert('Please change date. You cannot choose the past date.')
                     return;
                 }
             }
+
+            const result = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/task/create`, {
+                title, priority, checklistArr, dueDate
+            }, config);
+
+            setChecklistArr([]);
+            navigate('/dashboard');
         }
-
-        const result = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/task/create`, {
-            title, priority, checklistArr, dueDate
-        }, config);
-
-        navigate('/dashboard');
+        catch (err) {
+            if (err.response) {
+                alert(err.response.data.message);
+            }
+            else if (err.request) {
+                alert(err.request);
+            }
+            else {
+                alert(err.message);
+            }
+        }
     }
 
 
@@ -138,7 +184,9 @@ const Create = () => {
                 </div>
 
                 <div className={styles.buttonsDiv}>
-                    <button className={styles.dateBtn}>Select Due Date</button>
+                    <div className={styles.dateBtn} >
+                        <input type='date' style={{ width: '100%', height: '100%', outline: 'none', border: 'none', cursor: 'pointer' }} onChange={dateHandler} />
+                    </div>
                     <div>
                         <button className={styles.cancelBtn} onClick={cancelHandler}>Cancel</button>
                         <button className={styles.saveBtn} onClick={saveHandler}>Save</button>

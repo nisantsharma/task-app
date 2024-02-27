@@ -133,15 +133,17 @@
     font-size: 18px;
 }
 
+
 .dateBtn {
+    padding: 10px 15px;
+    border-radius: 5px;
+    width: 190px;
     color: #707070;
     border: 1px solid #E2E2E2;
     background-color: white;
-}
-
-.dateBtn:hover {
     cursor: pointer;
 }
+
 
 .cancelBtn {
     margin-right: 20px;

@@ -64,12 +64,12 @@ const Dashboard = () => {
 
     useEffect(() => {
         const getAllTasks = async () => {
-            const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/task/getAllTasks`, config);
+            const { data } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/task/filterTasks`, { filterValue }, config);
             setCardsArr(data.cardsArr);
         }
 
         getAllTasks();
-    }, []);
+    }, [filterValue]);
 
 
 

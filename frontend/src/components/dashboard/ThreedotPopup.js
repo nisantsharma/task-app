@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import styles from './ThreedotPopup.module.css'
 
 
-export default function ThreedotPopup({ dotPopup, setDotPopup }) {
+export default function ThreedotPopup({ dotPopup, taskId }) {
 	const navigate = useNavigate();
 
 
 	const editHandler = () => {
-		navigate('/edit');
+		navigate(`/edit/${taskId}`);
 	}
 
 	const shareHandler = () => {
@@ -16,7 +16,7 @@ export default function ThreedotPopup({ dotPopup, setDotPopup }) {
 	}
 
 	const deleteHandler = () => {
-		navigate('/delete');
+		navigate(`/delete/${taskId}`);
 	}
 
 
