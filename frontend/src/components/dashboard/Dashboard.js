@@ -18,7 +18,7 @@ import Toast from './Toast';
 
 const Dashboard = () => {
 
-    const { cardsArr, setCardsArr, showToast, setShowToast } = useContext(DataContext);
+    const { cardsArr, setCardsArr, showToast } = useContext(DataContext);
 
     const [clickedIcon, setClickedIcon] = useState('');
     const [filter, setFilter] = useState(false);
@@ -31,6 +31,11 @@ const Dashboard = () => {
     const date = dateObj.getDate();
     const month = dateObj.toLocaleString('default', { month: 'short' });
     const year = dateObj.getFullYear();
+
+    const suffixes = ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"];
+
+    // If the date is between 11 and 13, "th" will be the suffix
+    const suffixIndex = date > 10 && date < 14 ? 0 : date % 10;
 
     const config = {
         headers: {
@@ -88,7 +93,7 @@ const Dashboard = () => {
             <div className={styles.headingDiv}>
                 <div className={styles.welcomeDiv} >
                     <p style={{ fontWeight: '600', fontSize: '15px' }}>Welcome, {name}</p>
-                    <p style={{ color: '#707070', marginTop: '10px' }}>{`${date}th ${month}, ${year}`}</p>
+                    <p style={{ color: '#707070', marginTop: '10px' }}>{`${date}${suffixes[suffixIndex]} ${month}, ${year}`}</p>
                 </div>
                 {
                     showToast

@@ -59,6 +59,11 @@ const ShareCard = () => {
         month = dateObj.toLocaleString('default', { month: 'short' });
     }
 
+    const suffixes = ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"];
+
+    // If the date is between 11 and 13, "th" will be the suffix
+    const suffixIndex = date > 10 && date < 14 ? 0 : date % 10;
+
 
 
     useEffect(() => {
@@ -153,7 +158,7 @@ const ShareCard = () => {
                                                     : '#5A5A5A'
                                                 : '#5A5A5A'
                                         }}>
-                                        {dateObj ? `${month} ${date}th` : ''}
+                                        {dateObj ? `${month} ${date}${suffixes[suffixIndex]}` : ''}
                                     </div>
                                 </div>
                             )

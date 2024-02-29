@@ -11,7 +11,6 @@ router.post('/create', authenticateToken, createTask);
 router.put('/update/:taskId', authenticateToken, updateTask);
 router.delete('/delete/:taskId', authenticateToken, deleteTask);
 router.get('/getTask/:taskId', getTask);
-// router.get('/getAllTasks', authenticateToken, getAllTasks);
 router.post('/filterTasks', authenticateToken, filterTasks);
 router.get('/countTasks', authenticateToken, countTasks);
 

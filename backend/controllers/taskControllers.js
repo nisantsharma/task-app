@@ -14,10 +14,12 @@ export const createTask = async (req, res) => {
         if (dueDate) {
             dueDate = new Date(dueDate);
 
-            dueDate.setHours(23);
-            dueDate.setMinutes(59);
+            dueDate.setHours(18);
+            dueDate.setMinutes(29);
             dueDate.setSeconds(59);
             dueDate.setMilliseconds(999);
+
+            // we have to set time accordingly because indian time is 5 hour 30 minutes back from UTC time
         }
 
 
@@ -53,10 +55,12 @@ export const updateTask = async (req, res) => {
         if (dueDate) {
             dueDate = new Date(dueDate);
 
-            dueDate.setHours(23);
-            dueDate.setMinutes(59);
+            dueDate.setHours(18);
+            dueDate.setMinutes(29);
             dueDate.setSeconds(59);
             dueDate.setMilliseconds(999);
+
+            // we have to set time accordingly because indian time is 5 hour 30 minutes back from UTC time
         }
 
         const obj = {
@@ -118,21 +122,6 @@ export const getTask = async (req, res) => {
         }
 
         return res.status(200).json({ task });
-    }
-    catch (err) {
-        return res.status(500).json({ message: err.message });
-    }
-}
-
-
-export const getAllTasks = async (req, res) => {
-    try {
-        const { userId } = req.user;
-        const user = await User.findById(userId).populate('cardsArr');
-
-        const cardsArr = user.cardsArr;
-
-        return res.status(200).json({ cardsArr });
     }
     catch (err) {
         return res.status(500).json({ message: err.message });

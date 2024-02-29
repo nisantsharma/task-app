@@ -31,15 +31,23 @@ const Card = ({ item, index, clickedIcon, setClickedIcon }) => {
         arr = [arr[0]];
     }
 
+
     let dateObj = item.dueDate;
     let date, month;
 
     if (dateObj) {
+        console.log(dateObj);
         dateObj = new Date(dateObj);
+        console.log(dateObj);
 
         date = dateObj.getDate();
         month = dateObj.toLocaleString('default', { month: 'short' });
     }
+
+    const suffixes = ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"];
+
+    // If the date is between 11 and 13, "th" will be the suffix
+    const suffixIndex = date > 10 && date < 14 ? 0 : date % 10;
 
     const config = {
         headers: {
@@ -60,6 +68,7 @@ const Card = ({ item, index, clickedIcon, setClickedIcon }) => {
 
     const todayDate = new Date();
     let dueDate = item.dueDate ? new Date(item.dueDate) : null;
+
 
 
 
@@ -189,7 +198,7 @@ const Card = ({ item, index, clickedIcon, setClickedIcon }) => {
                                 : '#5A5A5A'
                             : '#5A5A5A'
                     }}>
-                    {dateObj ? `${month} ${date}th` : ''}
+                    {dateObj ? `${month} ${date}${suffixes[suffixIndex]}` : ''}
                 </div>
                 <div className={styles.allChips}>
                     {
