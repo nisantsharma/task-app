@@ -147,32 +147,6 @@ const Create = () => {
                     alert('Please change date. You cannot choose the past date.')
                     return;
                 }
-
-                //     const todayYear = todayDateObj.getFullYear();
-                //     const todayDate = todayDateObj.getDate();
-                //     const todayMonth = todayDateObj.getMonth();
-
-                //     const dueYear = dueDateObj.getFullYear();
-                //     const dueDated = dueDateObj.getDate();
-                //     const dueMonth = dueDateObj.getMonth();
-
-                //     if(dueYear < todayYear){
-                //         alert('Please change date. You cannot choose the past date.')
-                //         return;
-                //     }
-                //     else if (dueYear === todayYear) {
-                //         if (dueMonth < todayMonth) {
-                //             alert('Please change date. You cannot choose the past date.')
-                //             return;
-                //         }
-                //     }
-
-
-
-                //     if (dueYear < todayYear || dueMonth < todayMonth || dueDated < todayDate) {
-                //         alert('Please change date. You cannot choose the past date.')
-                //         return;
-                //     }
             }
 
             setLoading(true);
