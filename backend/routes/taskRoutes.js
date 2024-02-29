@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { authenticateToken } from '../middlewares/authMiddleware.js';
-import { countTasks, createTask, deleteTask, filterTasks, getAllTasks, getTask, updateTask } from '../controllers/taskControllers.js';
+import { countTasks, createTask, deleteTask, filterTasks, getTask, updateTask } from '../controllers/taskControllers.js';
 
 
 const router = express.Router();
