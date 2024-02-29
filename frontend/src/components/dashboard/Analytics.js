@@ -9,14 +9,14 @@ import Dot from '../../assets/dot.png';
 
 const Analytics = () => {
     const [countObj, setCountObj] = useState({
-        BACKLOG: 0,
-        'TO-DO': 0,
-        PROGRESS: 0,
-        DONE: 0,
-        LOW: 0,
-        MODERATE: 0,
-        HIGH: 0,
-        due: 0
+        BACKLOG: '00',
+        'TO-DO': '00',
+        PROGRESS: '00',
+        DONE: '00',
+        LOW: '00',
+        MODERATE: '00',
+        HIGH: '00',
+        due: '00'
     });
 
     const config = {
