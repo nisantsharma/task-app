@@ -36,9 +36,7 @@ const Card = ({ item, index, clickedIcon, setClickedIcon }) => {
     let date, month;
 
     if (dateObj) {
-        console.log(dateObj);
         dateObj = new Date(dateObj);
-        console.log(dateObj);
 
         date = dateObj.getDate();
         month = dateObj.toLocaleString('default', { month: 'short' });
