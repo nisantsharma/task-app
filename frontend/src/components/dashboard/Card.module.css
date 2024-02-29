@@ -4,6 +4,8 @@
     border-radius: 10px;
     font-family: 'Poppins', sans-serif;
     margin-bottom: 15px;
+    position: relative;
+    width: 26vw;
 }
 
 .cardHeading {
@@ -14,20 +16,21 @@
     height: 25px;
 }
 
-.leftDiv p {
-    font-size: 14px;
-}
-
-
 .leftDiv {
     display: flex;
     align-items: center;
 }
 
 .leftDiv img {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     margin-right: 10px;
+}
+
+.leftDiv p {
+    font-size: 14px;
+    font-weight: 500;
+    color: #707070;
 }
 
 .rightDiv {
@@ -40,10 +43,28 @@
     cursor: pointer;
 }
 
+.fullTitle {
+    border: 2px solid red;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: white;
+    text-align: justify;
+    position: absolute;
+    top: 80px;
+    width: 80%;
+    display: none;
+    overflow: auto;
+}
+
+
 .cardTitle {
     margin-bottom: 20px;
     font-weight: 500;
     font-size: 20px;
+    text-align: justify;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .checklistDiv {
@@ -80,8 +101,8 @@
     padding: 5px 10px;
     border-radius: 5px;
     font-size: 10px;
-    color: white;
-    min-width: 80px;
+    font-weight: 500;
+    min-width: 65px;
 }
 
 .allChips {

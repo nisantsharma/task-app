@@ -166,6 +166,10 @@
     cursor: pointer;
 }
 
+.saveBtn:disabled:hover {
+    cursor: wait;
+}
+
 .selected {
     background-color: #EEECEC;
 }

@@ -5,12 +5,21 @@
     font-style: normal;
 }
 
+.headingDiv {
+    position: relative;
+}
+
 .welcomeDiv {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px 30px 10px 0;
+}
 
+.toastDiv {
+    position: absolute;
+    top: 20px;
+    right: 180px;
 }
 
 .boardDiv {

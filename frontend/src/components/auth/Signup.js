@@ -11,6 +11,8 @@ import Profile from '../../assets/Profile.png';
 import Email from '../../assets/Email.png';
 import Lock from '../../assets/lock.png';
 import eye from '../../assets/eye.png';
+import crosseye from '../../assets/cross-eye.png';
+
 
 
 const Signup = ({ setLogin }) => {
@@ -23,12 +25,25 @@ const Signup = ({ setLogin }) => {
 		confirmPassword: ''
 	});
 
+	const [showPassword, setShowPassword] = useState(false);
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+	const [loading, setLoading] = useState(false);
+
+
 
 	const inputHandler = (e) => {
 		setObj({
 			...obj,
 			[e.target.name]: e.target.value
 		});
+	}
+
+	const eye1Handler = () => {
+		setShowPassword(!showPassword);
+	}
+
+	const eye2Handler = () => {
+		setShowConfirmPassword(!showConfirmPassword);
 	}
 
 	const registerHandler = async () => {
@@ -58,6 +73,8 @@ const Signup = ({ setLogin }) => {
 				return;
 			}
 
+			setLoading(true);
+
 			const result = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/user/signup`, obj);
 			const { token } = result.data;
 			localStorage.setItem('token', JSON.stringify(`Bearer ${token}`));
@@ -74,6 +91,9 @@ const Signup = ({ setLogin }) => {
 			else {
 				alert(err.message);
 			}
+		}
+		finally {
+			setLoading(false);
 		}
 	}
 
@@ -109,16 +129,28 @@ const Signup = ({ setLogin }) => {
 				</div>
 				<div className={styles.inputDiv}>
 					<img src={Lock} alt='lock' className={styles.leftImage} />
-					<input type='password' placeholder='Password' name='password' onChange={inputHandler} />
-					<img src={eye} alt='eye' className={styles.eye} />
+					<input type={showPassword ? 'text' : 'password'} placeholder='Password' name='password' onChange={inputHandler} />
+					{
+						(showPassword)
+							? (<img src={crosseye} alt='crosseye' className={styles.crosseye} onClick={eye1Handler} />)
+							: (<img src={eye} alt='eye' className={styles.eye} onClick={eye1Handler} />)
+					}
 				</div>
 				<div className={styles.inputDiv}>
 					<img src={Lock} alt='lock' className={styles.leftImage} />
-					<input type='password' placeholder='Confirm Password' name='confirmPassword' onChange={inputHandler} />
-					<img src={eye} alt='eye' className={styles.eye} />
+					<input type={showConfirmPassword ? 'text' : 'password'} placeholder='Confirm Password' name='confirmPassword' onChange={inputHandler} />
+					{
+						(showConfirmPassword)
+							? (<img src={crosseye} alt='crosseye' className={styles.crosseye} onClick={eye2Handler} />)
+							: (<img src={eye} alt='eye' className={styles.eye} onClick={eye2Handler} />)
+					}
 				</div>
 				<div className={styles.buttonsDiv}>
-					<button className={styles.registerBtn} onClick={registerHandler}>Register</button>
+					<button className={styles.registerBtn} onClick={registerHandler} disabled={loading}>
+						{
+							loading ? 'Registering...' : 'Register'
+						}
+					</button>
 					<p className={styles.question}>Have an account ?</p>
 					<button className={styles.loginBtn} onClick={loginHandler}>Log in</button>
 				</div>

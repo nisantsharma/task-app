@@ -5,13 +5,11 @@ import User from '../models/userModel.js';
 
 export const createTask = async (req, res) => {
     try {
-        let { priority, title, dueDate, checklistArr } = req.body;
+        let { category, priority, title, dueDate, checklistArr } = req.body;
 
-        if (!priority || title.trim().length === 0 || checklistArr.length === 0) {
+        if (!category || !priority || title.trim().length === 0 || checklistArr.length === 0) {
             return res.status(400).json({ message: 'all fields are required' });
         }
-
-        const category = 'TO-DO';
 
         if (dueDate) {
             dueDate = new Date(dueDate);
@@ -52,10 +50,6 @@ export const updateTask = async (req, res) => {
             return res.status(400).json({ message: 'all fields are required' });
         }
 
-        const obj = {
-            category, priority, title, dueDate, checklistArr
-        }
-
         if (dueDate) {
             dueDate = new Date(dueDate);
 
@@ -64,6 +58,11 @@ export const updateTask = async (req, res) => {
             dueDate.setSeconds(59);
             dueDate.setMilliseconds(999);
         }
+
+        const obj = {
+            category, priority, title, dueDate, checklistArr
+        }
+
 
         const { taskId } = req.params;
         const task = await Task.findOne({ _id: taskId });
@@ -234,6 +233,7 @@ export const countTasks = async (req, res) => {
 
             const dueDate = new Date(cardsArr[i].dueDate).getTime();
             const currentDate = new Date().getTime();
+
 
             if (cardsArr[i].category !== 'DONE' && cardsArr[i].dueDate && (dueDate < currentDate)) {
                 // it means the due time has passed of this task so it will count in due task because this task has not been completed in time

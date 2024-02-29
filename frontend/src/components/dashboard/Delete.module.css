@@ -41,6 +41,10 @@
     cursor: pointer;
 }
 
+.deleteBtn:disabled:hover {
+    cursor: wait;
+}
+
 .cancelBtn {
     font-family: "Noto Sans", sans-serif;
     font-weight: 600;

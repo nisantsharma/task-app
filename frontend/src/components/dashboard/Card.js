@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 
+import axios from 'axios';
+
 import styles from './Card.module.css';
 
 import { DataContext } from '../../context/DataProvider';
@@ -12,7 +14,6 @@ import Downarrow from '../../assets/downarrow.png';
 import Uparrow from '../../assets/uparrow.png';
 import CardChecklist from './CardChecklist';
 import ThreedotPopup from './ThreedotPopup';
-import axios from 'axios';
 
 
 
@@ -31,17 +32,14 @@ const Card = ({ item, index, clickedIcon, setClickedIcon }) => {
     }
 
     let dateObj = item.dueDate;
-    let date, month, year;
+    let date, month;
 
     if (dateObj) {
         dateObj = new Date(dateObj);
 
         date = dateObj.getDate();
         month = dateObj.toLocaleString('default', { month: 'short' });
-        year = dateObj.getFullYear();
     }
-
-
 
     const config = {
         headers: {
@@ -49,6 +47,34 @@ const Card = ({ item, index, clickedIcon, setClickedIcon }) => {
         }
     }
 
+
+    let totalChecked = 0;
+    const totalItem = item.checklistArr.length;
+
+    for (let i = 0; i < totalItem; i++) {
+        if (item.checklistArr[i].checked) {
+            totalChecked++;
+        }
+    }
+
+
+    const todayDate = new Date();
+    let dueDate = item.dueDate ? new Date(item.dueDate) : null;
+
+
+
+    useEffect(() => {
+        const fullTitle = document.getElementById(`fullTitle${index}`);
+        const cardTitle = document.getElementById(`cardTitle${index}`);
+
+        cardTitle.addEventListener('mouseover', () => {
+            fullTitle.style.display = 'block';
+        });
+
+        cardTitle.addEventListener('mouseout', () => {
+            fullTitle.style.display = 'none';
+        })
+    }, []);
 
 
     useEffect(() => {
@@ -122,15 +148,18 @@ const Card = ({ item, index, clickedIcon, setClickedIcon }) => {
                     }
                 </div>
                 <div className={styles.rightDiv} >
-                    <ThreedotPopup dotPopup={dotPopup} taskId={item._id} />
+                    <ThreedotPopup dotPopup={dotPopup} setDotPopup={setDotPopup} taskId={item._id} />
                     <img src={Threedots} alt='threedots' onClick={threedotHandler} />
                 </div>
             </div>
-            <p className={styles.cardTitle}>{item.title}</p>
+            <div className={styles.titleDiv}>
+                <p className={styles.fullTitle} id={`fullTitle${index}`}>{item.title}</p>
+                <p className={styles.cardTitle} id={`cardTitle${index}`}>{item.title}</p>
+            </div>
             <div className={styles.checklistDiv}>
                 <div className={styles.paraDiv}>
                     <p style={{ marginRight: '5px' }}>Checklist</p>
-                    <p>(0/3)</p>
+                    <p>{`(${totalChecked}/${totalItem})`}</p>
                 </div>
                 <div className={styles.arrowDiv} onClick={collapseHandler}>
                     {
@@ -146,9 +175,21 @@ const Card = ({ item, index, clickedIcon, setClickedIcon }) => {
             <div className={styles.lastDiv}>
                 <div className={styles.dateDiv}
                     style={{
-                        backgroundColor: item.category === 'DONE' ? '#63C05B' : '#CF3636'
+                        backgroundColor: (item.category === 'DONE')
+                            ? '#63C05B'
+                            : (dueDate)
+                                ? (dueDate.getTime() < todayDate.getTime())
+                                    ? '#CF3636'
+                                    : '#DBDBDB'
+                                : '#DBDBDB'
+                        ,
+                        color: (dueDate)
+                            ? (dueDate.getTime() < todayDate.getTime())
+                                ? '#FFFFFF'
+                                : '#5A5A5A'
+                            : '#5A5A5A'
                     }}>
-                    {dateObj ? `${date}th ${month}, ${year}` : ''}
+                    {dateObj ? `${month} ${date}th` : ''}
                 </div>
                 <div className={styles.allChips}>
                     {

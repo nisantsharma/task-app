@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import axios from 'axios';
@@ -17,9 +17,14 @@ import Checklist from './Checklist';
 const Create = () => {
     const { checklistArr, setChecklistArr } = useContext(DataContext);
 
-    const [title, setTitle] = useState('');
-    const [priority, setPriority] = useState('');
-    const [dueDate, setDueDate] = useState(null);
+    const [taskObj, setTaskObj] = useState({
+        title: '',
+        priority: '',
+        dueDate: null,
+        category: 'TO-DO'
+    });
+
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
     const params = useParams();
@@ -27,6 +32,7 @@ const Create = () => {
 
     const { taskId } = params;
     const path = location.pathname;
+    const edit = path.includes('/edit');
 
     const config = {
         headers: {
@@ -49,12 +55,43 @@ const Create = () => {
         }
     }
 
+    useEffect(() => {
+        const getTask = async () => {
+            try {
+                const result = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/task/getTask/${taskId}`, config);
+                setTaskObj(result.data.task);
+                setChecklistArr(result.data.task.checklistArr);
+            }
+            catch (err) {
+                if (err.response) {
+                    alert(err.response.data.message);
+                }
+                else if (err.request) {
+                    alert(err.request);
+                }
+                else {
+                    alert(err.message);
+                }
+            }
+        }
+
+        edit && getTask();
+    }, []);
+
+
     const titleHandler = (e) => {
-        setTitle(e.target.value);
+        setTaskObj({
+            ...taskObj,
+            title: e.target.value
+        })
     }
 
+
     const priorityHandler = (e) => {
-        setPriority(e.currentTarget.dataset.value);
+        setTaskObj({
+            ...taskObj,
+            priority: e.currentTarget.dataset.value
+        })
     }
 
 
@@ -64,12 +101,10 @@ const Create = () => {
     }
 
     const dateHandler = (e) => {
-        if (e.target.value) {
-            setDueDate(e.target.value);
-        }
-        else {
-            setDueDate(null);
-        }
+        setTaskObj({
+            ...taskObj,
+            dueDate: e.target.value ? e.target.value : null
+        })
     }
 
     const cancelHandler = () => {
@@ -79,11 +114,11 @@ const Create = () => {
 
     const saveHandler = async () => {
         try {
-            if (title.trim().length === 0) {
+            if (taskObj.title.trim().length === 0) {
                 alert('please fill the title field');
                 return;
             }
-            if (priority.length === 0) {
+            if (taskObj.priority.length === 0) {
                 alert('please select priority');
                 return;
             }
@@ -102,9 +137,9 @@ const Create = () => {
                 }
             }
 
-            if (dueDate) {
+            if (taskObj.dueDate) {
                 const todayDateObj = new Date();
-                const dueDateObj = new Date(dueDate);
+                const dueDateObj = new Date(taskObj.dueDate);
 
                 const todayYear = todayDateObj.getFullYear();
                 const todayDate = todayDateObj.getDate();
@@ -120,9 +155,20 @@ const Create = () => {
                 }
             }
 
-            const result = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/task/create`, {
-                title, priority, checklistArr, dueDate
-            }, config);
+            setLoading(true);
+
+            if (edit) {
+                const result = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/task/update/${taskId}`, {
+                    ...taskObj,
+                    checklistArr
+                }, config);
+            }
+            else {
+                const result = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/task/create`, {
+                    ...taskObj,
+                    checklistArr
+                }, config);
+            }
 
             setChecklistArr([]);
             navigate('/dashboard');
@@ -138,6 +184,9 @@ const Create = () => {
                 alert(err.message);
             }
         }
+        finally {
+            setLoading(false);
+        }
     }
 
 
@@ -148,20 +197,20 @@ const Create = () => {
             <div className={styles.centeredDiv}>
                 <div className={styles.inputDiv}>
                     <p className={styles.titlePara}>Title <span style={{ color: '#FF0000' }}>*</span></p>
-                    <input placeholder='Enter Task Title' className={styles.titleInput} value={title} onChange={titleHandler} />
+                    <input placeholder='Enter Task Title' className={styles.titleInput} value={taskObj.title} onChange={titleHandler} />
                 </div>
                 <div className={styles.secondDiv}>
                     <p className={styles.priorityPara}>Select Priority <span style={{ color: '#FF0000' }}>*</span> </p>
                     <div className={styles.priorityDiv}>
-                        <div className={`${styles.priorityItem} ${priority === 'HIGH' ? styles.selected : ''}`} data-value='HIGH' onClick={priorityHandler}>
+                        <div className={`${styles.priorityItem} ${taskObj.priority === 'HIGH' ? styles.selected : ''}`} data-value='HIGH' onClick={priorityHandler}>
                             <img width='10px' height='10px' src={Reddot} alt='reddot' />
                             <p>HIGH PRIORITY</p>
                         </div>
-                        <div className={`${styles.priorityItem} ${priority === 'MODERATE' ? styles.selected : ''}`} data-value='MODERATE' onClick={priorityHandler}>
+                        <div className={`${styles.priorityItem} ${taskObj.priority === 'MODERATE' ? styles.selected : ''}`} data-value='MODERATE' onClick={priorityHandler}>
                             <img width='10px' height='10px' src={Bluedot} alt='bluedot' />
                             <p>MODERATE PRIORITY</p>
                         </div>
-                        <div className={`${styles.priorityItem} ${priority === 'LOW' ? styles.selected : ''}`} style={{ marginRight: '0' }} data-value='LOW' onClick={priorityHandler}>
+                        <div className={`${styles.priorityItem} ${taskObj.priority === 'LOW' ? styles.selected : ''}`} style={{ marginRight: '0' }} data-value='LOW' onClick={priorityHandler}>
                             <img width='10px' height='10px' src={Greendot} alt='greendot' />
                             <p>LOW PRIORITY</p>
                         </div>
@@ -189,7 +238,15 @@ const Create = () => {
                     </div>
                     <div>
                         <button className={styles.cancelBtn} onClick={cancelHandler}>Cancel</button>
-                        <button className={styles.saveBtn} onClick={saveHandler}>Save</button>
+                        <button className={styles.saveBtn} onClick={saveHandler} disabled={loading}>
+                            {
+                                loading
+                                    ? 'Processing...'
+                                    : edit
+                                        ? 'Edit'
+                                        : 'Save'
+                            }
+                        </button>
                     </div>
                 </div>
             </div>

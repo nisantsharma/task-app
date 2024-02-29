@@ -10,6 +10,7 @@ import Circle from '../../assets/circle.png';
 import Email from '../../assets/Email.png';
 import Lock from '../../assets/lock.png'
 import eye from '../../assets/eye.png';
+import crosseye from '../../assets/cross-eye.png';
 
 
 const Login = ({ setLogin }) => {
@@ -20,12 +21,19 @@ const Login = ({ setLogin }) => {
 		password: ''
 	});
 
+	const [showPassword, setShowPassword] = useState(false);
+	const [loading, setLoading] = useState(false);
+
 
 	const inputHandler = (e) => {
 		setObj({
 			...obj,
 			[e.target.name]: e.target.value
 		})
+	}
+
+	const eyeHandler = () => {
+		setShowPassword(!showPassword);
 	}
 
 	const loginHandler = async () => {
@@ -39,6 +47,8 @@ const Login = ({ setLogin }) => {
 				alert('please fill the password field');
 				return;
 			}
+
+			setLoading(true);
 
 			const result = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/user/login`, obj);
 			const { token } = result.data;
@@ -56,6 +66,9 @@ const Login = ({ setLogin }) => {
 			else {
 				alert(err.message);
 			}
+		}
+		finally {
+			setLoading(false);
 		}
 	}
 
@@ -87,11 +100,19 @@ const Login = ({ setLogin }) => {
 				</div>
 				<div className={styles.inputDiv}>
 					<img src={Lock} alt='lock' className={styles.leftImage} />
-					<input type='password' placeholder='Password' name='password' onChange={inputHandler} />
-					<img src={eye} alt='eye' className={styles.eye} />
+					<input type={showPassword ? 'text' : 'password'} placeholder='Password' name='password' onChange={inputHandler} />
+					{
+						(showPassword)
+							? (<img src={crosseye} alt='crosseye' className={styles.crosseye} onClick={eyeHandler} />)
+							: (<img src={eye} alt='eye' className={styles.eye} onClick={eyeHandler} />)
+					}
 				</div>
 				<div className={styles.buttonsDiv}>
-					<button className={styles.loginBtn} onClick={loginHandler}>Log in</button>
+					<button className={styles.loginBtn} onClick={loginHandler} disabled={loading}>
+						{
+							loading ? 'Logging in...' : 'Log in'
+						}
+					</button>
 					<p className={styles.question}>Have no account yet ?</p>
 					<button className={styles.registerBtn} onClick={registerHandler}>Register</button>
 				</div>

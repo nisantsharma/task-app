@@ -4,5 +4,6 @@ export const notFound = async (req, res, next) => {
 
 
 export const errorHandler = async (err, req, res, next) => {
+    console.log(err);
     return res.status(500).json({ message: 'Internal server error' });
 }

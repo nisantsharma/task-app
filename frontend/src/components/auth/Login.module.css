@@ -75,17 +75,24 @@
   border: none;
   outline: none;
   font-size: 18px;
-  width: 90%;
+  width: 85%;
 }
 
 .eye {
   margin-left: 15px;
-  width: 23px;
+  width: 25px;
   height: 23px;
 }
 
-.eye:hover {
+.eye:hover,
+.crosseye:hover {
   cursor: pointer;
+}
+
+.crosseye {
+  margin-left: 15px;
+  width: 23px;
+  height: 23px;
 }
 
 .buttonsDiv {
@@ -110,6 +117,10 @@
 
 .loginBtn:hover {
   cursor: pointer;
+}
+
+.loginBtn:disabled:hover {
+  cursor: wait;
 }
 
 .question {

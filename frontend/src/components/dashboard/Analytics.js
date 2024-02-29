@@ -26,11 +26,22 @@ const Analytics = () => {
     }
 
 
+
     useEffect(() => {
         const getCount = async () => {
             try {
                 const result = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/task/countTasks`, config);
-                setCountObj(result.data.obj);
+                const { obj } = result.data;
+
+                let keys = Object.keys(obj);
+
+                for (let i = 0; i < keys.length; i++) {
+                    if (obj[keys[i]] < 9) {
+                        obj[keys[i]] = '0' + obj[keys[i]];
+                    }
+                }
+
+                setCountObj(obj);
             }
             catch (err) {
                 if (err.response) {

@@ -42,12 +42,19 @@
 
 .eye {
     margin-left: 15px;
-    width: 23px;
+    width: 25px;
     height: 23px;
 }
 
-.eye:hover {
+.eye:hover,
+.crosseye:hover {
     cursor: pointer;
+}
+
+.crosseye {
+    margin-left: 15px;
+    width: 23px;
+    height: 23px;
 }
 
 .buttonsDiv {
@@ -67,4 +74,8 @@
 
 .buttonsDiv button:hover {
     cursor: pointer;
+}
+
+.buttonsDiv button:disabled:hover {
+    cursor: wait;
 }

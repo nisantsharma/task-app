@@ -12,17 +12,18 @@ import { DataContext } from '../../context/DataProvider';
 
 import Card from './Card';
 import Filter from './Filter';
+import Toast from './Toast';
 
 
 
 const Dashboard = () => {
 
-    const { cardsArr, setCardsArr } = useContext(DataContext);
+    const { cardsArr, setCardsArr, showToast, setShowToast } = useContext(DataContext);
 
     const [clickedIcon, setClickedIcon] = useState('');
     const [filter, setFilter] = useState(false);
     const [filterValue, setFilterValue] = useState('This Week');
-    const [userName, setUserName] = useState('');
+    const [name, setName] = useState('');
 
     const navigate = useNavigate();
 
@@ -38,12 +39,12 @@ const Dashboard = () => {
     }
 
     useEffect(() => {
-        const getUserName = async () => {
+        const getUser = async () => {
             try {
-                const result = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/user/getUserName`, null, config);
-                const { name } = result.data;
+                const result = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/user/getUser`, config);
+                const { userName } = result.data;
 
-                setUserName(name);
+                setName(userName);
             }
             catch (err) {
                 if (err.response) {
@@ -58,7 +59,7 @@ const Dashboard = () => {
             }
         }
 
-        getUserName();
+        getUser();
     }, []);
 
 
@@ -86,9 +87,18 @@ const Dashboard = () => {
         <div className={styles.container}>
             <div className={styles.headingDiv}>
                 <div className={styles.welcomeDiv} >
-                    <p style={{ fontWeight: '600', fontSize: '15px' }}>Welcome, {userName}</p>
+                    <p style={{ fontWeight: '600', fontSize: '15px' }}>Welcome, {name}</p>
                     <p style={{ color: '#707070', marginTop: '10px' }}>{`${date}th ${month}, ${year}`}</p>
                 </div>
+                {
+                    showToast
+                        ? (
+                            <div className={styles.toastDiv}>
+                                <Toast />
+                            </div>
+                        )
+                        : (<></>)
+                }
                 <div className={styles.boardDiv}>
                     <p style={{ fontWeight: '500', fontSize: '22px' }}>Board</p>
                     <div className={styles.weekDiv}>
