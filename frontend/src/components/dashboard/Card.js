@@ -190,11 +190,13 @@ const Card = ({ item, index, clickedIcon, setClickedIcon }) => {
                                     : '#DBDBDB'
                                 : '#DBDBDB'
                         ,
-                        color: (dueDate)
-                            ? (dueDate.getTime() < todayDate.getTime())
-                                ? '#FFFFFF'
+                        color: (item.category === 'DONE')
+                            ? '#FFFFFF'
+                            : (dueDate)
+                                ? (dueDate.getTime() < todayDate.getTime())
+                                    ? '#FFFFFF'
+                                    : '#5A5A5A'
                                 : '#5A5A5A'
-                            : '#5A5A5A'
                     }}>
                     {dateObj ? `${month} ${date}${suffixes[suffixIndex]}` : ''}
                 </div>
