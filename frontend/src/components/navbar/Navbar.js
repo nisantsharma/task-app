@@ -55,7 +55,7 @@ const Navbar = () => {
                 <img width='25px' height='25px' src={Analytics} alt='analytics' />
                 <p>Analytics</p>
             </div>
-            <div className={styles.navitem} id='settings' data-name='settings' onClick={navHandler}>
+            <div className={`${styles.navitem} ${styles.lastNavItem}`} id='settings' data-name='settings' onClick={navHandler}>
                 <img width='25px' height='25px' src={Settings} alt='settings' />
                 <p>Settings</p>
             </div>

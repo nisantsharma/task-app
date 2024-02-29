@@ -37,10 +37,14 @@
     margin-right: 15px;
 }
 
+.lastNavItem {
+    margin-bottom: 45vh;
+}
+
 .logout {
     display: flex;
     align-items: center;
-    margin-top: 50vh;
+    /* margin-top: 50vh; */
     height: 40px;
     padding: 5px 40px;
     color: #CF3636;
