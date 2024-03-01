@@ -24,6 +24,8 @@ const ShareCard = () => {
         checklistArr: []
     });
 
+    const [notFound, setNotFound] = useState(false);
+
 
     const config = {
         headers: {
@@ -45,7 +47,6 @@ const ShareCard = () => {
     }
 
 
-    const todayDate = new Date();
     let dueDate = taskObj.dueDate ? new Date(taskObj.dueDate) : null;
 
 
@@ -75,7 +76,12 @@ const ShareCard = () => {
             }
             catch (err) {
                 if (err.response) {
-                    alert(err.response.data.message);
+                    if (err.response.status === '404') {
+                        setNotFound(true);
+                    }
+                    else {
+                        alert(err.response.data.message);
+                    }
                 }
                 else if (err.request) {
                     alert(err.request);
@@ -92,82 +98,74 @@ const ShareCard = () => {
 
 
 
-    return (
-        <div className={styles.container}>
-            <div style={{ display: 'flex' }}>
-                <img width='25px' height='25px' src={Promanage} alt='promanage' className={styles.promanageImg} />
-                <p className={styles.promanagePara}>Pro Manage</p>
-            </div>
-            <div className={styles.parentCenteredDiv}>
-                <div className={styles.centeredDiv}>
-                    <div className={styles.cardHeading}>
-                        <div className={styles.leftDiv}>
+    return (!notFound)
+        ? (
+            <div className={styles.container}>
+                <div style={{ display: 'flex' }}>
+                    <img width='25px' height='25px' src={Promanage} alt='promanage' className={styles.promanageImg} />
+                    <p className={styles.promanagePara}>Pro Manage</p>
+                </div>
+                <div className={styles.parentCenteredDiv}>
+                    <div className={styles.centeredDiv}>
+                        <div className={styles.cardHeading}>
+                            <div className={styles.leftDiv}>
+                                {
+                                    taskObj.priority === 'LOW' ? (
+                                        <>
+                                            <img src={Greendot} alt='greendot' />
+                                            <p>LOW PRIORITY</p>
+                                        </>
+                                    ) :
+                                        taskObj.priority === 'MODERATE' ? (
+                                            <>
+                                                <img src={Bluedot} alt='bluedot' />
+                                                <p>MODERATE PRIORITY</p>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img src={Reddot} alt='reddot' />
+                                                <p>HIGH PRIORITY</p>
+                                            </>
+                                        )
+                                }
+                            </div>
+                        </div>
+                        <div className={styles.titleDiv}>
+                            <p className={styles.cardTitle}>{taskObj.title}</p>
+                        </div>
+                        <div className={styles.checklistDiv}>
+                            <div className={styles.paraDiv}>
+                                <p style={{ marginRight: '5px' }}>Checklist</p>
+                                <p>{`(${totalChecked}/${totalItem})`}</p>
+                            </div>
+                        </div>
+                        <div className={styles.allChecklists}>
                             {
-                                taskObj.priority === 'LOW' ? (
-                                    <>
-                                        <img src={Greendot} alt='greendot' />
-                                        <p>LOW PRIORITY</p>
-                                    </>
-                                ) :
-                                    taskObj.priority === 'MODERATE' ? (
-                                        <>
-                                            <img src={Bluedot} alt='bluedot' />
-                                            <p>MODERATE PRIORITY</p>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <img src={Reddot} alt='reddot' />
-                                            <p>HIGH PRIORITY</p>
-                                        </>
-                                    )
+                                taskObj.checklistArr.map((elem, index) => (<CardChecklist key={index} elem={elem} />))
                             }
                         </div>
-                    </div>
-                    <div className={styles.titleDiv}>
-                        <p className={styles.cardTitle}>{taskObj.title}</p>
-                    </div>
-                    <div className={styles.checklistDiv}>
-                        <div className={styles.paraDiv}>
-                            <p style={{ marginRight: '5px' }}>Checklist</p>
-                            <p>{`(${totalChecked}/${totalItem})`}</p>
-                        </div>
-                    </div>
-                    <div className={styles.allChecklists}>
                         {
-                            taskObj.checklistArr.map((elem, index) => (<CardChecklist key={index} elem={elem} />))
+                            dueDate ?
+                                (
+                                    <div className={styles.lastDiv}>
+                                        <span>Due Date</span>
+                                        <div className={styles.dateDiv}>
+                                            {dateObj ? `${month} ${date}${suffixes[suffixIndex]}` : ''}
+                                        </div>
+                                    </div>
+                                )
+                                : <></>
                         }
                     </div>
-                    {
-                        dueDate ?
-                            (
-                                <div className={styles.lastDiv}>
-                                    <span>Due Date</span>
-                                    <div className={styles.dateDiv}
-                                        style={{
-                                            backgroundColor: (taskObj.category === 'DONE')
-                                                ? '#63C05B'
-                                                : (dueDate)
-                                                    ? (dueDate.getTime() < todayDate.getTime())
-                                                        ? '#CF3636'
-                                                        : '#DBDBDB'
-                                                    : '#DBDBDB'
-                                            ,
-                                            color: (dueDate)
-                                                ? (dueDate.getTime() < todayDate.getTime())
-                                                    ? '#FFFFFF'
-                                                    : '#5A5A5A'
-                                                : '#5A5A5A'
-                                        }}>
-                                        {dateObj ? `${month} ${date}${suffixes[suffixIndex]}` : ''}
-                                    </div>
-                                </div>
-                            )
-                            : <></>
-                    }
                 </div>
             </div>
-        </div>
-    )
+        )
+        : (
+            <div>
+                <h1>Error: 404 </h1>
+                <h2>Page Not Found</h2>
+            </div>
+        )
 }
 
 export default ShareCard;

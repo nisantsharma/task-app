@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import styles from './RegisterPage.module.css';
 
@@ -8,7 +9,18 @@ import Signup from '../components/auth/Signup'
 
 
 const RegisterPage = () => {
+    const navigate = useNavigate();
+
     const [login, setLogin] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+
+        if (token) {
+            navigate('/dashboard');
+        }
+    }, []);
+
 
 
     return (

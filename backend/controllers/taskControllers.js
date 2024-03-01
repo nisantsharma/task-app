@@ -224,8 +224,8 @@ export const countTasks = async (req, res) => {
             const currentDate = new Date().getTime();
 
 
-            if (cardsArr[i].category !== 'DONE' && cardsArr[i].dueDate && (dueDate < currentDate)) {
-                // it means the due time has passed of this task so it will count in due task because this task has not been completed in time
+            if (cardsArr[i].category !== 'DONE' && cardsArr[i].dueDate && (dueDate >= currentDate)) {
+                // it means the due time has not passed yet of this task so it will count in due task because this task has time remaining to complete
 
                 obj.due++;
             }
