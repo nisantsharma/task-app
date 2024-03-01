@@ -162,7 +162,11 @@ const ShareCard = () => {
         )
         : (
             <div style={{
-                display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', height: '100%'
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'column',
+                height: '100%'
             }}>
                 <h1>Error: 404 </h1>
                 <h2>Page Not Found</h2>
