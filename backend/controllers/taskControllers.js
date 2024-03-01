@@ -142,10 +142,11 @@ export const filterTasks = async (req, res) => {
         const currentMonth = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
 
+        // setting the week date
         const weekStart = new Date(currentDate);
 
-        // if current week starts from the previous month
-        if ((currentDate.getDate() - currentDate.getDay()) < 0) {
+        // if the date 6 days before exists in previous month or year
+        if ((currentDate.getDate() - 6) <= 0) {
 
             if (currentMonth === 0) {
                 // month is january therefore the  previous year will also decrease by one
@@ -155,15 +156,32 @@ export const filterTasks = async (req, res) => {
             weekStart.setMonth((currentMonth - 1 + 12) % 12);
         }
 
-        // setting the date to starting date of that week
-        weekStart.setDate(currentDate.getDate() - currentDate.getDay());
+        // setting the date to 6 days ago from today so that including today total days will be 7 
+        weekStart.setDate(currentDate.getDate() - 6);
 
-        const monthStart = new Date(currentYear, currentMonth, 1);
+
+        // setting the month date
+        const monthStart = new Date(currentDate);
+
+        // if the date 29 days before exists in previous month or year
+        if ((currentDate.getDate() - 29) <= 0) {
+
+            if (currentMonth === 0) {
+                // month is january therefore the  previous year will also decrease by one
+                monthStart.setFullYear(currentYear - 1);
+            }
+
+            monthStart.setMonth((currentMonth - 1 + 12) % 12);
+        }
+
+        monthStart.setDate(currentDate.getDate() - 29);
+
+
+        // setting the today date
         const today = new Date(currentYear, currentMonth, currentDate.getDate());
 
         const filteredArr = [];
         const len = cardsArr.length;
-
 
         if (filterValue === 'This Week') {
 
