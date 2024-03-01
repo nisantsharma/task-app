@@ -76,7 +76,6 @@ const ShareCard = () => {
             }
             catch (err) {
                 if (err.response) {
-                    console.log(err.response);
                     if (err.response.status === 404) {
                         setNotFound(true);
                     }
@@ -162,7 +161,7 @@ const ShareCard = () => {
             </div>
         )
         : (
-            <div>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <h1>Error: 404 </h1>
                 <h2>Page Not Found</h2>
             </div>
